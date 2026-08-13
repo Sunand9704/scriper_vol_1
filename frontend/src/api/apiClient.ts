@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { SCRAPER_BASE } from './config';
 
-// Centralized Base URL directly configured
-export const API_BASE_URL = 'http://localhost:5000/api/scraper';
+// Centralized Base URL - sourced from VITE_API_URL (frontend/.env)
+export const API_BASE_URL = SCRAPER_BASE;
 
 // Centralized Axios Instance
 export const apiClient = axios.create({

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { User } from './userApi';
-
-const AUTH_BASE = 'http://localhost:5000/api/auth';
+import { AUTH_BASE } from './config';
 
 export interface AuthResponse {
   success: boolean;

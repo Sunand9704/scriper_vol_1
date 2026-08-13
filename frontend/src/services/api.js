@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { PROPERTIES_BASE } from '../api/config';
 
-const API_BASE_URL = 'http://localhost:5000/api/properties';
+const API_BASE_URL = PROPERTIES_BASE;
 
 export const fetchProperties = async (params = {}) => {
   try {

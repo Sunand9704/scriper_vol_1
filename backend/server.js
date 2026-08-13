@@ -9,8 +9,11 @@ const authRoutes = require('./src/routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/scriper2';
+const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
 
-app.use(cors());
+app.use(cors({
+  origin: CORS_ORIGIN === '*' ? '*' : CORS_ORIGIN.split(',').map((o) => o.trim())
+}));
 app.use(express.json());
 
 // API Routes

@@ -1,7 +1,11 @@
 const jwt = require('jsonwebtoken');
 const dbStore = require('../storage/dbStore');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'scriper_secret_jwt_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not set. Copy backend/.env.example to backend/.env and set it.');
+}
 
 async function authMiddleware(req, res, next) {
   try {

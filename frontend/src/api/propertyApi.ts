@@ -1,4 +1,5 @@
-import { apiClient, API_BASE_URL } from './apiClient';
+import { apiClient } from './apiClient';
+import { PROPERTIES_BASE } from './config';
 
 export interface PropertyCategoryDetails {
   foodIncluded?: boolean;
@@ -55,30 +56,30 @@ export interface FetchPropertiesFilters {
   stayType?: string;
 }
 
-const PROPERTY_BASE = 'http://localhost:5000/api/properties';
+const PROPERTY_BASE = PROPERTIES_BASE;
 
 export const propertyApi = {
   // Get all properties with optional filters
   async getProperties(filters: FetchPropertiesFilters = {}): Promise<{ success: boolean; count: number; data: Property[] }> {
-    const res = await apiClient.get('/../properties', { params: filters });
+    const res = await apiClient.get(PROPERTY_BASE, { params: filters });
     return res.data;
   },
 
   // Get single property by ID
   async getPropertyById(id: string): Promise<{ success: boolean; data: Property }> {
-    const res = await apiClient.get(`/../properties/${id}`);
+    const res = await apiClient.get(`${PROPERTY_BASE}/${id}`);
     return res.data;
   },
 
   // Onboard new property
   async createProperty(propertyData: Partial<Property>): Promise<{ success: boolean; message: string; data: Property }> {
-    const res = await apiClient.post('/../properties', propertyData);
+    const res = await apiClient.post(PROPERTY_BASE, propertyData);
     return res.data;
   },
 
   // Delete property
   async deleteProperty(id: string): Promise<{ success: boolean; message: string }> {
-    const res = await apiClient.delete(`/../properties/${id}`);
+    const res = await apiClient.delete(`${PROPERTY_BASE}/${id}`);
     return res.data;
   }
 };
