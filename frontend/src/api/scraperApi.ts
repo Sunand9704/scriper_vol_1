@@ -28,6 +28,10 @@ export interface ScrapedLead {
   reviewsCount?: number;
   category?: string;
   city?: string;
+  landmark?: string;
+  latitude?: number;
+  longitude?: number;
+  mapsUrl?: string;
   scrapedAt?: string;
   assignedTo?: AssignedToUser;
   assignedAt?: string;
@@ -42,6 +46,7 @@ export interface ScrapeJob {
   source: string;
   query?: string;
   location?: string;
+  landmark?: string;
   depth?: number;
   status: 'started' | 'running' | 'completed' | 'stopped' | 'error';
   progress: number;
@@ -82,6 +87,8 @@ export interface TeamStatsResponse {
 export interface StartScrapeParams {
   query: string;
   location: string;
+  /** Optional specific area/landmark inside the city, e.g. "Andhra University" */
+  landmark?: string;
   source: 'GoogleMaps' | 'JustDial' | 'Web';
   depth: number;
 }

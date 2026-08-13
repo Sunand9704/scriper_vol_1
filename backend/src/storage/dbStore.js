@@ -19,6 +19,7 @@ const ScrapeJobSchema = new mongoose.Schema({
   source: { type: String, enum: ['GoogleMaps', 'JustDial', 'Web'], default: 'GoogleMaps' },
   query: String,
   location: String,
+  landmark: String,
   depth: Number,
   status: { type: String, enum: ['started', 'running', 'completed', 'stopped', 'error'], default: 'started' },
   progress: { type: Number, default: 0 },
@@ -40,8 +41,11 @@ const ScrapedLeadSchema = new mongoose.Schema({
   reviewsCount: { type: Number, default: 0 },
   category: { type: String, default: '' },
   city: { type: String, default: '' },
+  landmark: { type: String, default: '' },
   latitude: Number,
   longitude: Number,
+  // Direct Google Maps deep-link for this business location
+  mapsUrl: { type: String, default: '' },
   scrapedAt: { type: Date, default: Date.now },
   assignedTo: {
     userId: { type: String, default: null },
@@ -63,37 +67,15 @@ const ScrapedLeadSchema = new mongoose.Schema({
   lastActivityAt: Date
 }, { timestamps: true });
 
-// Accommodation Onboarding Property Schema
-const PropertySchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  place: { type: String, required: true, trim: true },
-  ownerName: { type: String, required: true, trim: true },
-  ownerMobile: { type: String, required: true, trim: true },
-  category: { type: String, required: true, enum: ['PG', 'Hostel', 'Dormitory', 'Bachelor Room'] },
-  stayType: { type: String, default: 'Long Stay', enum: ['Short Stay', 'Long Stay', 'Both Short & Long Stay'] },
-  shortStayDuration: { type: String, default: '1-7 Days' },
-  dailyPrice: { type: Number, default: 0 },
-  longStayDuration: { type: String, default: '1 Month+' },
-  monthlyPrice: { type: Number, default: 0 },
-  rent: { type: Number, required: true, default: 0 },
-  deposit: { type: Number, default: 0 },
-  address: { type: String, default: '' },
-  imageUrl: { type: String, default: '' },
-  amenities: { type: [String], default: [] },
-  categoryDetails: { type: mongoose.Schema.Types.Mixed, default: {} }
-}, { timestamps: true });
-
 let UserModel;
 let ScrapeJobModel;
 let ScrapedLeadModel;
-let PropertyModel;
 
 let isMongoConnected = false;
 const DATA_DIR = path.join(__dirname, '../../data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const JOBS_FILE = path.join(DATA_DIR, 'jobs.json');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
-const PROPERTIES_FILE = path.join(DATA_DIR, 'properties.json');
 
 // Pre-hashed default password hashes
 const ADMIN_HASH = bcrypt.hashSync('admin123', 10);
@@ -126,121 +108,9 @@ const DEFAULT_USERS = [
   }
 ];
 
-// Pre-seeded sample onboarding properties
-const DEFAULT_PROPERTIES = [
-  {
-    _id: "66b1a1a1a1a1a1a1a1a1a001",
-    name: "Starlight Premium PG for Men",
-    place: "Koramangala 5th Block, Bangalore",
-    ownerName: "Rajesh Kumar",
-    ownerMobile: "+91 98765 43210",
-    category: "PG",
-    stayType: "Both Short & Long Stay",
-    shortStayDuration: "1-7 Days",
-    dailyPrice: 450,
-    longStayDuration: "1 Month+",
-    monthlyPrice: 9500,
-    rent: 9500,
-    deposit: 15000,
-    address: "No. 42, 1st Cross, Near Jyoti Nivas College Road, Koramangala",
-    imageUrl: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
-    amenities: ["WiFi", "AC", "Food", "TV", "Housekeeping", "Power Backup", "RO Water", "Washing Machine"],
-    categoryDetails: {
-      foodIncluded: true,
-      foodType: "Both (Veg & Non-Veg)",
-      sharingTypes: ["Single", "2 Sharing", "3 Sharing"],
-      acAvailable: true,
-      curfewTime: "10:30 PM",
-      housekeeping: true
-    },
-    createdAt: new Date("2026-08-01").toISOString()
-  },
-  {
-    _id: "66b1a1a1a1a1a1a1a1a1a002",
-    name: "Apex Luxury Girls Hostel & Residency",
-    place: "HSR Layout Sector 2, Bangalore",
-    ownerName: "Anita Sharma",
-    ownerMobile: "+91 91234 56789",
-    category: "Hostel",
-    stayType: "Long Stay",
-    shortStayDuration: "1-7 Days",
-    dailyPrice: 600,
-    longStayDuration: "1 Month+",
-    monthlyPrice: 11000,
-    rent: 11000,
-    deposit: 20000,
-    address: "Plot 88, 27th Main Rd, Sector 2, HSR Layout",
-    imageUrl: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
-    amenities: ["WiFi", "CCTV Security", "Warden On-site", "Mess Canteen", "Study Room", "Biometric Lock", "RO Water"],
-    categoryDetails: {
-      hostelType: "Girls Hostel",
-      roomTypes: ["Double Sharing", "Triple Sharing"],
-      canteenFacility: true,
-      wardenContact: "+91 91234 56799",
-      securityCCTV: true,
-      studyRoom: true
-    },
-    createdAt: new Date("2026-08-03").toISOString()
-  },
-  {
-    _id: "66b1a1a1a1a1a1a1a1a1a003",
-    name: "Backpackers Pod & Dormitory",
-    place: "Indiranagar 100ft Road, Bangalore",
-    ownerName: "Vikram Malhotra",
-    ownerMobile: "+91 99887 76655",
-    category: "Dormitory",
-    stayType: "Short Stay",
-    shortStayDuration: "1 Day",
-    dailyPrice: 450,
-    longStayDuration: "1 Month+",
-    monthlyPrice: 9000,
-    rent: 450,
-    deposit: 500,
-    address: "12A, 100 Feet Rd, Opposite Metro Station, Indiranagar",
-    imageUrl: "https://images.unsplash.com/photo-1520277739336-7bf67edfa768?auto=format&fit=crop&w=800&q=80",
-    amenities: ["WiFi", "Personal Lockers", "AC", "24/7 Washroom", "Keycard Access", "Lounge"],
-    categoryDetails: {
-      totalBeds: 24,
-      rateType: "Daily Rate",
-      bedType: "Bunk Bed Pod",
-      lockersAvailable: true,
-      washroomsCount: 6,
-      checkInTime: "12:00 PM (24/7 Access)"
-    },
-    createdAt: new Date("2026-08-05").toISOString()
-  },
-  {
-    _id: "66b1a1a1a1a1a1a1a1a1a004",
-    name: "Urban Nest 1BHK Bachelor Studio",
-    place: "BTM Layout 2nd Stage, Bangalore",
-    ownerName: "Suresh Reddy",
-    ownerMobile: "+91 97654 32109",
-    category: "Bachelor Room",
-    stayType: "Long Stay",
-    shortStayDuration: "1-7 Days",
-    dailyPrice: 800,
-    longStayDuration: "1 Month+",
-    monthlyPrice: 14000,
-    rent: 14000,
-    deposit: 30000,
-    address: "House 304, 7th Main, BTM 2nd Stage",
-    imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-    amenities: ["Kitchen Setup", "Balcony", "24/7 Water", "Covered Parking", "Power Backup"],
-    categoryDetails: {
-      roomType: "1 BHK Independent",
-      furnishing: "Semi-Furnished",
-      allowedTenants: "Bachelors Male / Female",
-      kitchenAvailable: true,
-      waterSupply: "24 Hours Borewell & Kaveri"
-    },
-    createdAt: new Date("2026-08-08").toISOString()
-  }
-];
-
 let localUsers = [];
 let localJobs = [];
 let localLeads = [];
-let localProperties = [];
 
 function ensureDataFiles() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -271,17 +141,6 @@ function ensureDataFiles() {
   } else {
     fs.writeFileSync(LEADS_FILE, '[]', 'utf8');
   }
-
-  // Properties File
-  if (fs.existsSync(PROPERTIES_FILE)) {
-    try {
-      localProperties = JSON.parse(fs.readFileSync(PROPERTIES_FILE, 'utf8'));
-      if (localProperties.length === 0) localProperties = [...DEFAULT_PROPERTIES];
-    } catch (e) { localProperties = [...DEFAULT_PROPERTIES]; }
-  } else {
-    localProperties = [...DEFAULT_PROPERTIES];
-    fs.writeFileSync(PROPERTIES_FILE, JSON.stringify(localProperties, null, 2), 'utf8');
-  }
 }
 
 function saveLocalData() {
@@ -292,7 +151,6 @@ function saveLocalData() {
     fs.writeFileSync(USERS_FILE, JSON.stringify(localUsers, null, 2), 'utf8');
     fs.writeFileSync(JOBS_FILE, JSON.stringify(localJobs, null, 2), 'utf8');
     fs.writeFileSync(LEADS_FILE, JSON.stringify(localLeads, null, 2), 'utf8');
-    fs.writeFileSync(PROPERTIES_FILE, JSON.stringify(localProperties, null, 2), 'utf8');
   } catch (e) {
     console.error('Error saving local data fallback:', e.message);
   }
@@ -308,20 +166,12 @@ async function initDb(mongoUri) {
       UserModel = mongoose.model('User', UserSchema);
       ScrapeJobModel = mongoose.model('ScrapeJob', ScrapeJobSchema);
       ScrapedLeadModel = mongoose.model('ScrapedLead', ScrapedLeadSchema);
-      PropertyModel = mongoose.model('Property', PropertySchema);
 
       // Seed default users in Mongo if empty
       const userCount = await UserModel.countDocuments();
       if (userCount === 0) {
         await UserModel.insertMany(DEFAULT_USERS);
         console.log('🌱 Seeded default users in MongoDB database.');
-      }
-
-      // Seed default properties in Mongo if empty
-      const propCount = await PropertyModel.countDocuments();
-      if (propCount === 0) {
-        await PropertyModel.insertMany(DEFAULT_PROPERTIES);
-        console.log('🌱 Seeded default onboarding properties in MongoDB database.');
       }
       return;
     } catch (err) {
@@ -419,92 +269,6 @@ const dbStore = {
     return await this.registerUser(userData);
   },
 
-  // Accommodation Onboarding Property Methods
-  async getProperties(filters = {}) {
-    let results = [];
-    const { category, search, place, stayType } = filters;
-
-    if (isMongoConnected) {
-      let query = {};
-      if (category && category !== 'All') {
-        query.category = category;
-      }
-      if (stayType && stayType !== 'All') {
-        query.stayType = { $regex: stayType, $options: 'i' };
-      }
-      if (search) {
-        query.$or = [
-          { name: { $regex: search, $options: 'i' } },
-          { place: { $regex: search, $options: 'i' } },
-          { ownerName: { $regex: search, $options: 'i' } }
-        ];
-      }
-      if (place) {
-        query.place = { $regex: place, $options: 'i' };
-      }
-      results = await PropertyModel.find(query).sort({ createdAt: -1 }).lean();
-    } else {
-      results = [...localProperties];
-      if (category && category !== 'All') {
-        results = results.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
-      }
-      if (stayType && stayType !== 'All') {
-        results = results.filter(p => p.stayType && p.stayType.toLowerCase().includes(stayType.toLowerCase()));
-      }
-      if (search) {
-        const q = search.toLowerCase();
-        results = results.filter(p =>
-          (p.name && p.name.toLowerCase().includes(q)) ||
-          (p.place && p.place.toLowerCase().includes(q)) ||
-          (p.ownerName && p.ownerName.toLowerCase().includes(q))
-        );
-      }
-      if (place) {
-        results = results.filter(p => p.place && p.place.toLowerCase().includes(place.toLowerCase()));
-      }
-    }
-    return results;
-  },
-
-  async getPropertyById(id) {
-    if (isMongoConnected) {
-      return await PropertyModel.findById(id).lean();
-    } else {
-      return localProperties.find(p => p._id === id) || null;
-    }
-  },
-
-  async createProperty(propertyData) {
-    if (isMongoConnected) {
-      return await PropertyModel.create(propertyData);
-    } else {
-      const createdItem = {
-        _id: 'prop_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-        ...propertyData,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      localProperties.unshift(createdItem);
-      saveLocalData();
-      return createdItem;
-    }
-  },
-
-  async deleteProperty(id) {
-    if (isMongoConnected) {
-      const prop = await PropertyModel.findByIdAndDelete(id);
-      return Boolean(prop);
-    } else {
-      const idx = localProperties.findIndex(p => p._id === id);
-      if (idx !== -1) {
-        localProperties.splice(idx, 1);
-        saveLocalData();
-        return true;
-      }
-      return false;
-    }
-  },
-
   // Jobs methods
   async createJob(jobData) {
     const now = new Date().toISOString();
@@ -514,6 +278,7 @@ const dbStore = {
       source: jobData.source || 'GoogleMaps',
       query: jobData.query || '',
       location: jobData.location || '',
+      landmark: jobData.landmark || '',
       depth: jobData.depth || 10,
       status: jobData.status || 'started',
       progress: jobData.progress || 0,
@@ -600,7 +365,8 @@ const dbStore = {
           { category: regex },
           { phone: regex },
           { email: regex },
-          { address: regex }
+          { address: regex },
+          { landmark: regex }
         ];
       }
       results = await ScrapedLeadModel.find(query).sort({ scrapedAt: -1 }).lean();
@@ -620,7 +386,8 @@ const dbStore = {
           (l.category && l.category.toLowerCase().includes(s)) ||
           (l.phone && l.phone.includes(s)) ||
           (l.email && l.email.toLowerCase().includes(s)) ||
-          (l.address && l.address.toLowerCase().includes(s))
+          (l.address && l.address.toLowerCase().includes(s)) ||
+          (l.landmark && l.landmark.toLowerCase().includes(s))
         );
       }
     }

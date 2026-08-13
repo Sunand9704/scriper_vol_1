@@ -30,12 +30,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, curre
   const menuItems = isAdmin ? adminMenuItems : employeeMenuItems;
 
   return (
-    <aside className="w-64 border-r border-gray-800 bg-[#0f172a]/60 backdrop-blur-xl flex flex-col justify-between p-4 min-h-[calc(100vh-4rem)]">
+    <aside className="w-64 border-r border-slate-200 bg-white/70 backdrop-blur-xl flex flex-col justify-between p-4 min-h-[calc(100vh-4rem)]">
       <div className="space-y-6">
-        <div className="px-3 flex items-center justify-between text-[11px] font-bold tracking-wider text-gray-500 uppercase">
-          <span>{isAdmin ? 'Admin Console' : 'Employee Workspace'}</span>
-          <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold ${
-            isAdmin ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+        <div className="px-3 flex items-center justify-between gap-2 text-2xs font-bold tracking-wider text-slate-400 uppercase">
+          <span className="truncate">{isAdmin ? 'Admin Console' : 'Employee Workspace'}</span>
+          <span className={`px-2 py-0.5 rounded-full text-3xs font-extrabold ${
+            isAdmin ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-cyan-50 text-cyan-600 border border-cyan-200'
           }`}>
             {currentUser.role}
           </span>
@@ -51,11 +51,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, curre
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-400 shadow-lg shadow-cyan-500/10'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-200 text-cyan-600 shadow-lg shadow-cyan-500/10'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-gray-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-600' : 'text-slate-500'}`} />
                 <span>{item.label}</span>
               </button>
             );
@@ -63,12 +63,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, curre
         </nav>
       </div>
 
-      <div className="p-3 rounded-2xl bg-gray-900/80 border border-gray-800 space-y-2">
-        <div className="flex items-center gap-2 text-xs font-bold text-gray-200">
-          <Shield className="w-4 h-4 text-amber-400" />
+      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+          <Shield className="w-4 h-4 text-amber-600" />
           <span>Role Based Control</span>
         </div>
-        <p className="text-[11px] text-gray-400 leading-relaxed">
+        <p className="text-2xs text-slate-500 leading-relaxed">
           {isAdmin
             ? 'Admins generate leads & assign them to sales representatives.'
             : 'Employees manage & convert their assigned business leads.'}

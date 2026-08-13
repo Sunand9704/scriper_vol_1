@@ -24,18 +24,39 @@ function extractEmail(text) {
 }
 
 /**
+ * Builds a Google Maps deep-link for a lead.
+ * Prefers exact coordinates, then the scraped place URL, then a name+address search.
+ */
+function buildMapsUrl(placeUrl, businessName, address, latitude, longitude) {
+  if (typeof latitude === 'number' && typeof longitude === 'number' && !isNaN(latitude) && !isNaN(longitude)) {
+    return `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+  }
+  if (placeUrl && placeUrl.includes('/maps/place/')) return placeUrl;
+  const term = [businessName, address].filter(Boolean).join(', ').trim();
+  if (!term) return '';
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(term)}`;
+}
+
+/**
  * Playwright Scraper Engine
  */
 async function startScrapeJob(jobId, params) {
-  const { query, location, source = 'GoogleMaps', depth = 15 } = params;
+  const { query, location, landmark = '', source = 'GoogleMaps', depth = 15 } = params;
   const targetDepth = Math.max(1, Math.min(parseInt(depth, 10) || 15, 100));
-  const fullSearchQuery = `${query} in ${location}`.trim();
+  const cleanLandmark = (landmark || '').trim();
+
+  // When a landmark/area is supplied we bias the provider search to that exact
+  // neighbourhood, e.g. "PG near Andhra University, Visakhapatnam"
+  const fullSearchQuery = (cleanLandmark
+    ? `${query} near ${cleanLandmark}, ${location}`
+    : `${query} in ${location}`).trim();
 
   console.log('\n======================================================');
   console.log(`🚀 [SCRAPER ENGINE] NEW SCRAPE MISSION STARTED`);
   console.log(`🆔 Job ID: ${jobId}`);
   console.log(`🔎 Category/Query: "${query}"`);
   console.log(`📍 Location: "${location}"`);
+  console.log(`📌 Landmark/Area: "${cleanLandmark || 'Not specified (city-wide)'}"`);
   console.log(`📡 Provider Source: ${source}`);
   console.log(`🔢 Target Depth: ${targetDepth} leads`);
   console.log('======================================================\n');
@@ -58,7 +79,7 @@ async function startScrapeJob(jobId, params) {
   });
 
   // Execute scrape asynchronously
-  runBrowserScrape(jobId, fullSearchQuery, source, targetDepth, location, query).catch(async (err) => {
+  runBrowserScrape(jobId, fullSearchQuery, source, targetDepth, location, query, cleanLandmark).catch(async (err) => {
     console.error(`❌ [Scraper Failure - Job ${jobId}]:`, err.message);
     const j = activeJobs.get(jobId);
     if (j) {
@@ -74,7 +95,7 @@ async function startScrapeJob(jobId, params) {
   return jobState;
 }
 
-async function runBrowserScrape(jobId, searchQuery, source, maxResults, location, queryKeyword) {
+async function runBrowserScrape(jobId, searchQuery, source, maxResults, location, queryKeyword, landmark = '') {
   let browser = null;
   const jobState = activeJobs.get(jobId);
 
@@ -197,6 +218,28 @@ async function runBrowserScrape(jobId, searchQuery, source, maxResults, location
           const addressEl = card.querySelector('.W4Efsd:last-child, [class*="address"]');
           const address = addressEl ? addressEl.textContent.trim() : '';
 
+          // Google Maps place link + coordinates (used for the "open in maps" action)
+          let mapsUrl = '';
+          if (card.tagName === 'A' && card.href && card.href.includes('/maps/place/')) {
+            mapsUrl = card.href;
+          } else {
+            const placeLink = card.querySelector('a[href*="/maps/place/"]');
+            if (placeLink) mapsUrl = placeLink.href;
+          }
+
+          let latitude = null;
+          let longitude = null;
+          if (mapsUrl) {
+            // Place URLs embed coordinates as !3d<lat>!4d<lng> or @<lat>,<lng>
+            const dMatch = mapsUrl.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+            const atMatch = mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+            const coords = dMatch || atMatch;
+            if (coords) {
+              latitude = parseFloat(coords[1]);
+              longitude = parseFloat(coords[2]);
+            }
+          }
+
           items.push({
             businessName: name,
             phone,
@@ -204,7 +247,10 @@ async function runBrowserScrape(jobId, searchQuery, source, maxResults, location
             reviewsCount,
             category,
             website,
-            address
+            address,
+            mapsUrl,
+            latitude,
+            longitude
           });
         });
 
@@ -219,8 +265,10 @@ async function runBrowserScrape(jobId, searchQuery, source, maxResults, location
         const cleanedPhone = cleanPhone(item.phone);
         const email = extractEmail(item.website || item.address || item.businessName);
         const hasWeb = Boolean(item.website && item.website.length > 5);
+        const resolvedAddress = item.address || (landmark ? `Near ${landmark}, ${location}` : `${location}`);
+        const mapsUrl = buildMapsUrl(item.mapsUrl, item.businessName, resolvedAddress, item.latitude, item.longitude);
 
-        console.log(` 🏢 [Lead #${idx + 1}] "${item.businessName}" | Rating: ${item.rating || 'N/A'} | Phone: ${cleanedPhone || item.phone || 'N/A'} | Web: ${item.website || 'None'}`);
+        console.log(` 🏢 [Lead #${idx + 1}] "${item.businessName}" | Rating: ${item.rating || 'N/A'} | Phone: ${cleanedPhone || item.phone || 'N/A'} | Web: ${item.website || 'None'} | 📍 ${mapsUrl ? 'Map link captured' : 'No map link'}`);
 
         leads.push({
           jobId,
@@ -230,11 +278,15 @@ async function runBrowserScrape(jobId, searchQuery, source, maxResults, location
           email,
           website: item.website || '',
           hasWebsite: hasWeb,
-          address: item.address || `${location}`,
+          address: resolvedAddress,
           rating: item.rating || '4.5',
           reviewsCount: item.reviewsCount || 12,
           category: item.category || queryKeyword || 'Business',
           city: location,
+          landmark,
+          mapsUrl,
+          latitude: item.latitude ?? undefined,
+          longitude: item.longitude ?? undefined,
           scrapedAt: new Date().toISOString()
         });
       });
@@ -247,10 +299,13 @@ async function runBrowserScrape(jobId, searchQuery, source, maxResults, location
       const categories = [queryKeyword || 'Business Services', 'Consultant', 'Enterprise', 'Provider', 'Agency'];
       for (let i = 1; i <= missingCount; i++) {
         const randId = Math.floor(1000 + Math.random() * 9000);
-        const name = `${queryKeyword || 'Lead'} ${location} ${i} (${randId})`;
+        const name = `${queryKeyword || 'Lead'} ${landmark || location} ${i} (${randId})`;
         const phone = `+91 ${Math.floor(7000000000 + Math.random() * 2999999999)}`;
         const web = Math.random() > 0.3 ? `https://www.${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.com` : '';
         const email = web ? `contact@${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.com` : '';
+        const genAddress = landmark
+          ? `Plot ${randId}, Near ${landmark}, ${location}`
+          : `Plot ${randId}, Sector ${i}, ${location}`;
 
         leads.push({
           jobId,
@@ -260,11 +315,13 @@ async function runBrowserScrape(jobId, searchQuery, source, maxResults, location
           email,
           website: web,
           hasWebsite: Boolean(web),
-          address: `Plot ${randId}, Sector ${i}, ${location}`,
+          address: genAddress,
           rating: (3.8 + Math.random() * 1.1).toFixed(1),
           reviewsCount: Math.floor(10 + Math.random() * 250),
           category: categories[i % categories.length],
           city: location,
+          landmark,
+          mapsUrl: buildMapsUrl('', landmark ? `${landmark}, ${location}` : location, genAddress),
           scrapedAt: new Date().toISOString()
         });
       }

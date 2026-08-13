@@ -62,12 +62,12 @@ export const AccommodationPropertiesPage: React.FC = () => {
       {/* Top Banner Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-600 text-xs font-bold mb-2">
             <Building2 className="w-3.5 h-3.5" />
             <span>Accommodation Onboarding Engine</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white">Property & Accommodation Explorer</h1>
-          <p className="text-xs text-gray-400">
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Property & Accommodation Explorer</h1>
+          <p className="text-xs text-slate-500">
             Browse onboarded PGs, Hostels, Dormitories, and Bachelor Rooms, or onboard a new listing.
           </p>
         </div>
@@ -75,7 +75,7 @@ export const AccommodationPropertiesPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={fetchPropertiesData}
-            className="p-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 transition cursor-pointer"
+            className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer"
             title="Refresh Listings"
           >
             <RefreshCw className="w-4 h-4" />
@@ -102,7 +102,7 @@ export const AccommodationPropertiesPage: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                 selectedCategory === cat
                   ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20'
-                  : 'bg-gray-900/80 text-gray-400 border border-gray-800 hover:text-white hover:bg-gray-800'
+                  : 'bg-white text-slate-500 border border-slate-200 hover:text-slate-900 hover:bg-slate-200'
               }`}
             >
               {cat === 'All' ? '🏢 All Properties' : cat}
@@ -112,27 +112,27 @@ export const AccommodationPropertiesPage: React.FC = () => {
 
         {/* Search Input */}
         <div className="relative w-full md:w-72">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
           <input
             type="text"
             placeholder="Search property, location, owner..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-900/90 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500 transition"
           />
         </div>
       </div>
 
       {/* Property Cards Grid */}
       {loading ? (
-        <div className="py-20 text-center text-gray-400 text-xs font-semibold">
+        <div className="py-20 text-center text-slate-500 text-xs font-semibold">
           Loading accommodation properties...
         </div>
       ) : properties.length === 0 ? (
         <div className="glass-panel p-16 rounded-3xl text-center space-y-4">
-          <Home className="w-12 h-12 text-gray-600 mx-auto" />
-          <h3 className="text-base font-bold text-white">No Properties Found</h3>
-          <p className="text-xs text-gray-400 max-w-sm mx-auto">
+          <Home className="w-12 h-12 text-slate-400 mx-auto" />
+          <h3 className="text-base font-bold text-slate-900">No Properties Found</h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
             No accommodation listings matched your search criteria. Click "Onboard New Property" to add a new PG, Hostel, Dormitory, or Bachelor Room!
           </p>
           <button

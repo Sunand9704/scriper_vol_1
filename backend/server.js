@@ -5,7 +5,6 @@ const dbStore = require('./src/storage/dbStore');
 const scraperRoutes = require('./src/routes/scraperRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
-const propertyRoutes = require('./src/routes/propertyRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,13 +17,12 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/scraper', scraperRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/properties', propertyRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    service: 'Unified Scriper 2 Engine & Accommodation Onboarding API',
+    service: 'Unified Scriper 2 Engine API',
     database: dbStore.isMongo() ? 'MongoDB' : 'Local JSON Store',
     timestamp: new Date().toISOString()
   });
@@ -32,7 +30,7 @@ app.get('/api/health', (req, res) => {
 
 // Root route
 app.get('/', (req, res) => {
-  res.send('🚀 Unified Scriper 2 Backend & Accommodation Onboarding API is running.');
+  res.send('🚀 Unified Scriper 2 Backend API is running.');
 });
 
 // Global error handler
@@ -51,7 +49,7 @@ async function startServer() {
     console.log('\n======================================================');
     console.log(`🚀 [Unified Backend Server] Running on http://localhost:${PORT}`);
     console.log(`🔌 Database Mode: ${dbStore.isMongo() ? 'MongoDB' : 'Local JSON File Store'}`);
-    console.log('📌 Mounted Endpoints: /api/scraper, /api/auth, /api/users, /api/properties');
+    console.log('📌 Mounted Endpoints: /api/scraper, /api/auth, /api/users');
     console.log('======================================================\n');
   });
 }

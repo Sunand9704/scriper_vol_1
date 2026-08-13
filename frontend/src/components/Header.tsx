@@ -11,44 +11,44 @@ export const Header: React.FC<HeaderProps> = ({ onNewScrapeClick }) => {
   const isAdmin = user?.role === 'ADMIN';
 
   return (
-    <header className="h-16 border-b border-gray-800 bg-[#0f172a]/70 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+    <header className="h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
           <Database className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-lg font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <h1 className="text-lg font-bold text-slate-900 tracking-tight">
             Scriper Data Engine
           </h1>
-          <p className="text-xs text-gray-400 font-medium">Role-Based Lead Management System</p>
+          <p className="text-xs text-slate-500 font-medium">Role-Based Lead Management System</p>
         </div>
       </div>
 
       <div className="flex items-center gap-4">
         {/* User Session Profile & Logout */}
         {user && (
-          <div className="flex items-center gap-3 px-3.5 py-1.5 rounded-2xl bg-gray-900/90 border border-gray-800">
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-cyan-500/40 bg-gray-800 shrink-0 flex items-center justify-center">
+          <div className="flex items-center gap-3 px-3.5 py-1.5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-cyan-300 bg-slate-100 shrink-0 flex items-center justify-center">
               {user.avatar ? (
                 <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
               ) : (
-                <UserCheck className="w-4 h-4 text-cyan-400" />
+                <UserCheck className="w-4 h-4 text-cyan-600" />
               )}
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-xs font-bold text-white leading-tight">{user.name}</span>
-              <span className={`text-[10px] font-extrabold tracking-wider uppercase ${
-                isAdmin ? 'text-amber-400' : 'text-cyan-400'
+              <span className="text-xs font-bold text-slate-900 leading-tight">{user.name}</span>
+              <span className={`text-3xs font-extrabold tracking-wider uppercase ${
+                isAdmin ? 'text-amber-600' : 'text-cyan-600'
               }`}>
                 {user.role}
               </span>
             </div>
 
-            <div className="h-6 w-px bg-gray-800 mx-1" />
+            <div className="h-6 w-px bg-slate-100 mx-1" />
 
             <button
               onClick={logout}
-              className="p-1.5 rounded-xl text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+              className="p-1.5 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
               title="Logout Session"
             >
               <LogOut className="w-4 h-4" />
@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ onNewScrapeClick }) => {
         )}
 
         {/* System Status */}
-        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 text-xs font-semibold">
           <Activity className="w-3.5 h-3.5 animate-pulse" />
           <span>System Online</span>
         </div>

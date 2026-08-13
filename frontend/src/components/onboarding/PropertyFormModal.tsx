@@ -114,11 +114,11 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 font-['Plus_Jakarta_Sans',sans-serif]">
-      <div className="bg-[#0f172a] border border-gray-800 rounded-3xl p-6 w-full max-w-2xl max-h-[90vh] shadow-2xl space-y-6 relative overflow-y-auto">
+    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center z-50 p-4 font-['Plus_Jakarta_Sans',sans-serif]">
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-2xl max-h-[90vh] shadow-2xl space-y-6 relative overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition cursor-pointer"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -129,13 +129,13 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
             <Building2 className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold text-white">Onboard New Property</h2>
-            <p className="text-xs text-gray-400">Add PG, Hostel, Dormitory, or Bachelor Room listing</p>
+            <h2 className="text-xl font-extrabold text-slate-900">Onboard New Property</h2>
+            <p className="text-xs text-slate-500">Add PG, Hostel, Dormitory, or Bachelor Room listing</p>
           </div>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
+          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
             {error}
           </div>
         )}
@@ -143,7 +143,7 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Step 1: Category Selector */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-300">1. Select Accommodation Category *</label>
+            <label className="text-xs font-bold text-slate-600">1. Select Accommodation Category *</label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {(['PG', 'Hostel', 'Dormitory', 'Bachelor Room'] as const).map((cat) => (
                 <button
@@ -152,8 +152,8 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
                   onClick={() => setCategory(cat)}
                   className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
                     category === cat
-                      ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 shadow-lg shadow-cyan-500/10'
-                      : 'border-gray-800 bg-gray-900/60 text-gray-400 hover:bg-gray-800'
+                      ? 'border-cyan-500 bg-cyan-50 text-cyan-600 shadow-lg shadow-cyan-500/10'
+                      : 'border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-200'
                   }`}
                 >
                   <Home className="w-4 h-4" />
@@ -164,83 +164,83 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
           </div>
 
           {/* Step 2: Basic Details */}
-          <div className="space-y-3 pt-2 border-t border-gray-800">
-            <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-wider">2. Basic Property & Owner Information</h3>
+          <div className="space-y-3 pt-2 border-t border-slate-200">
+            <h3 className="text-xs font-bold text-cyan-600 uppercase tracking-wider">2. Basic Property & Owner Information</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Property Name *</label>
+                <label className="text-2xs font-semibold text-slate-500">Property Name *</label>
                 <input
                   type="text"
                   placeholder="e.g. Starlight Luxury PG"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Place / Location *</label>
+                <label className="text-2xs font-semibold text-slate-500">Place / Location *</label>
                 <input
                   type="text"
                   placeholder="e.g. Koramangala, Bangalore"
                   value={place}
                   onChange={(e) => setPlace(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Owner Name *</label>
+                <label className="text-2xs font-semibold text-slate-500">Owner Name *</label>
                 <input
                   type="text"
                   placeholder="e.g. Rajesh Kumar"
                   value={ownerName}
                   onChange={(e) => setOwnerName(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Owner Mobile *</label>
+                <label className="text-2xs font-semibold text-slate-500">Owner Mobile *</label>
                 <input
                   type="text"
                   placeholder="e.g. +91 98765 43210"
                   value={ownerMobile}
                   onChange={(e) => setOwnerMobile(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[11px] font-semibold text-gray-400">Image URL (Optional)</label>
+              <label className="text-2xs font-semibold text-slate-500">Image URL (Optional)</label>
               <input
                 type="text"
                 placeholder="https://images.unsplash.com/photo-..."
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
               />
             </div>
           </div>
 
           {/* Step 3: Category Specific Fields */}
-          <div className="space-y-3 pt-2 border-t border-gray-800">
-            <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider">3. Category Specific Configurations ({category})</h3>
+          <div className="space-y-3 pt-2 border-t border-slate-200">
+            <h3 className="text-xs font-bold text-amber-600 uppercase tracking-wider">3. Category Specific Configurations ({category})</h3>
 
             {category === 'PG' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-900/60 p-3.5 rounded-2xl border border-gray-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs">
                 <div>
-                  <label className="text-gray-400">Food Type</label>
+                  <label className="text-slate-500">Food Type</label>
                   <select
                     value={foodType}
                     onChange={(e) => setFoodType(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   >
                     <option value="Veg Only">Veg Only</option>
                     <option value="Non-Veg Only">Non-Veg Only</option>
@@ -249,25 +249,25 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
                 </div>
 
                 <div>
-                  <label className="text-gray-400">Curfew Time</label>
+                  <label className="text-slate-500">Curfew Time</label>
                   <input
                     type="text"
                     value={curfewTime}
                     onChange={(e) => setCurfewTime(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
               </div>
             )}
 
             {category === 'Hostel' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-900/60 p-3.5 rounded-2xl border border-gray-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs">
                 <div>
-                  <label className="text-gray-400">Hostel Type</label>
+                  <label className="text-slate-500">Hostel Type</label>
                   <select
                     value={hostelType}
                     onChange={(e) => setHostelType(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   >
                     <option value="Boys Hostel">Boys Hostel</option>
                     <option value="Girls Hostel">Girls Hostel</option>
@@ -276,60 +276,60 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
                 </div>
 
                 <div>
-                  <label className="text-gray-400">Warden Mobile Contact</label>
+                  <label className="text-slate-500">Warden Mobile Contact</label>
                   <input
                     type="text"
                     placeholder="+91 91234 56789"
                     value={wardenContact}
                     onChange={(e) => setWardenContact(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
               </div>
             )}
 
             {category === 'Dormitory' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-900/60 p-3.5 rounded-2xl border border-gray-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs">
                 <div>
-                  <label className="text-gray-400">Total Bunk Beds</label>
+                  <label className="text-slate-500">Total Bunk Beds</label>
                   <input
                     type="number"
                     value={totalBeds}
                     onChange={(e) => setTotalBeds(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-gray-400">Bed Type</label>
+                  <label className="text-slate-500">Bed Type</label>
                   <input
                     type="text"
                     value={bedType}
                     onChange={(e) => setBedType(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
               </div>
             )}
 
             {category === 'Bachelor Room' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-900/60 p-3.5 rounded-2xl border border-gray-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs">
                 <div>
-                  <label className="text-gray-400">Room Format</label>
+                  <label className="text-slate-500">Room Format</label>
                   <input
                     type="text"
                     value={roomType}
                     onChange={(e) => setRoomType(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-gray-400">Furnishing</label>
+                  <label className="text-slate-500">Furnishing</label>
                   <select
                     value={furnishing}
                     onChange={(e) => setFurnishing(e.target.value)}
-                    className="w-full mt-1 p-2 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs"
+                    className="w-full mt-1 p-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs"
                   >
                     <option value="Fully Furnished">Fully Furnished</option>
                     <option value="Semi-Furnished">Semi-Furnished</option>
@@ -341,39 +341,39 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
           </div>
 
           {/* Step 4: Pricing & Amenities */}
-          <div className="space-y-3 pt-2 border-t border-gray-800">
-            <h3 className="text-xs font-bold text-emerald-400 uppercase tracking-wider">4. Rent Pricing & Amenities</h3>
+          <div className="space-y-3 pt-2 border-t border-slate-200">
+            <h3 className="text-xs font-bold text-emerald-600 uppercase tracking-wider">4. Rent Pricing & Amenities</h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Monthly Rent (₹) *</label>
+                <label className="text-2xs font-semibold text-slate-500">Monthly Rent (₹) *</label>
                 <input
                   type="number"
                   placeholder="e.g. 9500"
                   value={rent}
                   onChange={(e) => setRent(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Security Deposit (₹)</label>
+                <label className="text-2xs font-semibold text-slate-500">Security Deposit (₹)</label>
                 <input
                   type="number"
                   placeholder="e.g. 15000"
                   value={deposit}
                   onChange={(e) => setDeposit(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-gray-400">Stay Option</label>
+                <label className="text-2xs font-semibold text-slate-500">Stay Option</label>
                 <select
                   value={stayType}
                   onChange={(e: any) => setStayType(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white cursor-pointer"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 cursor-pointer"
                 >
                   <option value="Long Stay">Long Stay (Monthly)</option>
                   <option value="Short Stay">Short Stay (Daily)</option>
@@ -383,32 +383,32 @@ export const PropertyFormModal: React.FC<PropertyFormModalProps> = ({ onClose, o
             </div>
 
             <div>
-              <label className="text-[11px] font-semibold text-gray-400 mb-1.5 block">Select Included Amenities</label>
+              <label className="text-2xs font-semibold text-slate-500 mb-1.5 block">Select Included Amenities</label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {availableAmenities.map((amenity) => (
                   <button
                     type="button"
                     key={amenity}
                     onClick={() => toggleAmenity(amenity)}
-                    className={`p-2 rounded-xl border text-[11px] font-semibold flex items-center justify-between transition cursor-pointer ${
+                    className={`p-2 rounded-xl border text-2xs font-semibold flex items-center justify-between transition cursor-pointer ${
                       selectedAmenities.includes(amenity)
-                        ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400'
-                        : 'border-gray-800 bg-gray-900/40 text-gray-500 hover:text-gray-300'
+                        ? 'border-cyan-500 bg-cyan-50 text-cyan-600'
+                        : 'border-slate-200 bg-slate-50 text-slate-400 hover:text-slate-700'
                     }`}
                   >
                     <span>{amenity}</span>
-                    {selectedAmenities.includes(amenity) && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />}
+                    {selectedAmenities.includes(amenity) && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-600" />}
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold transition cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition cursor-pointer"
             >
               Cancel
             </button>

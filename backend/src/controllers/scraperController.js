@@ -6,7 +6,7 @@ const scraperController = {
   // Start a new scrape job
   async startScrape(req, res) {
     try {
-      const { query, location, source = 'GoogleMaps', depth = 15 } = req.body;
+      const { query, location, landmark = '', source = 'GoogleMaps', depth = 15 } = req.body;
 
       if (!query || !location) {
         return res.status(400).json({
@@ -15,8 +15,12 @@ const scraperController = {
         });
       }
 
+      const cleanLandmark = (landmark || '').trim();
+
       const jobId = 'job_' + uuidv4().substring(0, 8);
-      const name = `${query} in ${location} (${source})`;
+      const name = cleanLandmark
+        ? `${query} near ${cleanLandmark}, ${location} (${source})`
+        : `${query} in ${location} (${source})`;
 
       // Create record in database
       const newJob = await dbStore.createJob({
@@ -25,6 +29,7 @@ const scraperController = {
         source,
         query,
         location,
+        landmark: cleanLandmark,
         depth: parseInt(depth, 10) || 15,
         status: 'started',
         progress: 0,
@@ -32,7 +37,7 @@ const scraperController = {
       });
 
       // Start asynchronous browser scraping process
-      playwrightScraper.startScrapeJob(jobId, { query, location, source, depth });
+      playwrightScraper.startScrapeJob(jobId, { query, location, landmark: cleanLandmark, source, depth });
 
       return res.json({
         success: true,
@@ -43,6 +48,7 @@ const scraperController = {
           source,
           query,
           location,
+          landmark: cleanLandmark,
           depth
         }
       });
@@ -183,7 +189,7 @@ const scraperController = {
       }
 
       // Generate CSV
-      const headers = ['Business Name', 'Phone', 'Email', 'Website', 'Has Website', 'Address', 'Rating', 'Reviews', 'Category', 'City', 'Assigned Employee', 'Lead Status', 'Source', 'Scraped At'];
+      const headers = ['Business Name', 'Phone', 'Email', 'Website', 'Has Website', 'Address', 'Rating', 'Reviews', 'Category', 'City', 'Landmark / Area', 'Google Maps Link', 'Assigned Employee', 'Lead Status', 'Source', 'Scraped At'];
       const csvRows = [headers.join(',')];
 
       leads.forEach(l => {
@@ -198,6 +204,8 @@ const scraperController = {
           l.reviewsCount || 0,
           `"${(l.category || '').replace(/"/g, '""')}"`,
           `"${(l.city || '').replace(/"/g, '""')}"`,
+          `"${(l.landmark || '').replace(/"/g, '""')}"`,
+          `"${(l.mapsUrl || '').replace(/"/g, '""')}"`,
           `"${l.assignedTo?.name || 'Unassigned'}"`,
           `"${l.leadStatus || 'NEW'}"`,
           `"${l.source || ''}"`,

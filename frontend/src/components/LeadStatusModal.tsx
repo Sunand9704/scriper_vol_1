@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScrapedLead, scraperApi } from '../api/scraperApi';
 import { User } from '../api/userApi';
+import { MapLocationButton } from './MapLocationButton';
 import { X, CheckCircle2, MessageSquare, Tag, Loader2, Building2, Phone, Globe, Clock } from 'lucide-react';
 
 interface LeadStatusModalProps {
@@ -22,13 +23,13 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
   const [error, setError] = useState('');
 
   const statusOptions = [
-    { value: 'NEW', label: '🆕 New Lead', color: 'bg-gray-800 text-gray-300' },
-    { value: 'CONTACTED', label: '📞 Contacted / Called', color: 'bg-blue-500/20 text-blue-400' },
-    { value: 'INTERESTED', label: '🔥 Interested', color: 'bg-cyan-500/20 text-cyan-400' },
-    { value: 'QUALIFIED', label: '⭐ Qualified Opportunity', color: 'bg-amber-500/20 text-amber-400' },
-    { value: 'CALLBACK', label: '⏰ Call Back Requested', color: 'bg-purple-500/20 text-purple-400' },
-    { value: 'CLOSED_WON', label: '🎉 Closed Won / Client', color: 'bg-emerald-500/20 text-emerald-400' },
-    { value: 'CLOSED_LOST', label: '❌ Closed Lost', color: 'bg-rose-500/20 text-rose-400' },
+    { value: 'NEW', label: '🆕 New Lead', color: 'bg-slate-100 text-slate-600' },
+    { value: 'CONTACTED', label: '📞 Contacted / Called', color: 'bg-blue-100 text-blue-600' },
+    { value: 'INTERESTED', label: '🔥 Interested', color: 'bg-cyan-100 text-cyan-600' },
+    { value: 'QUALIFIED', label: '⭐ Qualified Opportunity', color: 'bg-amber-100 text-amber-600' },
+    { value: 'CALLBACK', label: '⏰ Call Back Requested', color: 'bg-purple-100 text-purple-600' },
+    { value: 'CLOSED_WON', label: '🎉 Closed Won / Client', color: 'bg-emerald-100 text-emerald-600' },
+    { value: 'CLOSED_LOST', label: '❌ Closed Lost', color: 'bg-rose-100 text-rose-600' },
   ];
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -58,35 +59,38 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
-      <div className="bg-[#0f172a] border border-gray-800 rounded-3xl p-6 w-full max-w-xl shadow-2xl space-y-6 relative overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-xl shadow-2xl space-y-6 relative overflow-hidden">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition cursor-pointer"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Lead Header */}
         <div className="flex items-start gap-4 pr-10">
-          <div className="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-cyan-50 border border-cyan-200 text-cyan-600 flex items-center justify-center shrink-0">
             <Building2 className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">{lead.businessName}</h2>
-            <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
-              <span className="flex items-center gap-1 font-mono text-gray-300">
-                <Phone className="w-3 h-3 text-cyan-400" />
+            <h2 className="text-lg font-bold text-slate-900">{lead.businessName}</h2>
+            <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
+              <span className="flex items-center gap-1 font-mono text-slate-600">
+                <Phone className="w-3 h-3 text-cyan-600" />
                 {lead.phone || 'No phone'}
               </span>
               <span>•</span>
               <span>{lead.city || 'Location unavailable'}</span>
             </div>
+            <div className="pt-2">
+              <MapLocationButton lead={lead} variant="full" />
+            </div>
           </div>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
             {error}
           </div>
         )}
@@ -94,8 +98,8 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
         <form onSubmit={handleUpdate} className="space-y-5">
           {/* Status Selector */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-300 flex items-center gap-1.5">
-              <Tag className="w-3.5 h-3.5 text-cyan-400" />
+            <label className="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+              <Tag className="w-3.5 h-3.5 text-cyan-600" />
               <span>Update Lead Status</span>
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -106,12 +110,12 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
                   onClick={() => setStatus(opt.value)}
                   className={`p-3 rounded-xl border text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                     status === opt.value
-                      ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 shadow-lg shadow-cyan-500/10'
-                      : 'border-gray-800 bg-gray-900/60 text-gray-400 hover:bg-gray-800'
+                      ? 'border-cyan-500 bg-cyan-50 text-cyan-600 shadow-lg shadow-cyan-500/10'
+                      : 'border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-200'
                   }`}
                 >
                   <span>{opt.label}</span>
-                  {status === opt.value && <CheckCircle2 className="w-4 h-4 text-cyan-400" />}
+                  {status === opt.value && <CheckCircle2 className="w-4 h-4 text-cyan-600" />}
                 </button>
               ))}
             </div>
@@ -119,8 +123,8 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
 
           {/* Add Activity Note */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-300 flex items-center gap-1.5">
-              <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
+            <label className="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+              <MessageSquare className="w-3.5 h-3.5 text-cyan-600" />
               <span>Add Call Log / Activity Note (Optional)</span>
             </label>
             <textarea
@@ -128,22 +132,22 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
               placeholder="e.g. Called owner, interested in web design proposal. Follow up on Tuesday."
               value={noteText}
               onChange={(e) => setNoteText(e.target.value)}
-              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white focus:outline-none focus:border-cyan-500 transition resize-none"
+              className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-cyan-500 transition resize-none"
             />
           </div>
 
           {/* Previous Notes Log */}
           {lead.notes && lead.notes.length > 0 && (
-            <div className="space-y-2 pt-2 border-t border-gray-800">
-              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Previous Activity Log ({lead.notes.length})</span>
+            <div className="space-y-2 pt-2 border-t border-slate-200">
+              <span className="text-2xs font-bold text-slate-500 uppercase tracking-wider">Previous Activity Log ({lead.notes.length})</span>
               <div className="max-h-36 overflow-y-auto space-y-2 pr-1">
                 {lead.notes.map((n, idx) => (
-                  <div key={n.id || idx} className="p-3 rounded-xl bg-gray-900/80 border border-gray-800/80 text-xs space-y-1">
-                    <div className="flex items-center justify-between text-[10px] text-gray-400">
-                      <span className="font-bold text-cyan-400">{n.authorName}</span>
+                  <div key={n.id || idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                    <div className="flex items-center justify-between text-3xs text-slate-500">
+                      <span className="font-bold text-cyan-600">{n.authorName}</span>
                       <span>{new Date(n.createdAt).toLocaleString()}</span>
                     </div>
-                    <p className="text-gray-300 leading-relaxed">{n.text}</p>
+                    <p className="text-slate-600 leading-relaxed">{n.text}</p>
                   </div>
                 ))}
               </div>
@@ -155,7 +159,7 @@ export const LeadStatusModal: React.FC<LeadStatusModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold transition cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition cursor-pointer"
             >
               Cancel
             </button>

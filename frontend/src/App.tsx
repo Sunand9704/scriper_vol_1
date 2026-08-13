@@ -48,10 +48,10 @@ function MainAppContent() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center text-white">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-900">
         <div className="text-center space-y-3">
-          <Loader2 className="w-10 h-10 text-cyan-400 animate-spin mx-auto" />
-          <p className="text-xs text-gray-400 font-semibold">Validating session...</p>
+          <Loader2 className="w-10 h-10 text-cyan-600 animate-spin mx-auto" />
+          <p className="text-xs text-slate-500 font-semibold">Validating session...</p>
         </div>
       </div>
     );
@@ -64,7 +64,7 @@ function MainAppContent() {
   const isAdmin = user.role === 'ADMIN';
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-gray-100 flex flex-col font-[#Plus_Jakarta_Sans',sans-serif]">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Top Header */}
       <Header onNewScrapeClick={() => setActiveTab('search')} />
 
