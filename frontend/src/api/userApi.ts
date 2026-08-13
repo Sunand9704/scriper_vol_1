@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { USERS_BASE } from './config';
 
 export interface User {
   userId: string;
@@ -8,7 +9,7 @@ export interface User {
   avatar?: string;
 }
 
-const API_BASE = 'http://localhost:5000/api/users';
+const API_BASE = USERS_BASE;
 
 export const userApi = {
   async getUsers(): Promise<{ success: boolean; count: number; data: User[] }> {
