@@ -1,0 +1,47 @@
+[
+  {
+    "userId": "user_admin_01",
+    "name": "Admin Manager",
+    "email": "admin@scriper.com",
+    "role": "ADMIN",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+  },
+  {
+    "userId": "user_emp_01",
+    "name": "John Doe",
+    "email": "john@scriper.com",
+    "role": "EMPLOYEE",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+  },
+  {
+    "userId": "user_emp_02",
+    "name": "Sarah Connor",
+    "email": "sarah@scriper.com",
+    "role": "EMPLOYEE",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+  },
+  {
+    "userId": "user_bswz80nat",
+    "name": "sunand",
+    "email": "sunandvemavarapu@gmail.com",
+    "password": "$2a$10$xp57G8KLu9qVR8hWz.F2WerYlpjyqZUYb905.JPU2iH/GGxNCtSx.",
+    "role": "ADMIN",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=sunand"
+  },
+  {
+    "userId": "user_zua8719cp",
+    "name": "sunand-user",
+    "email": "sunandvemavarapu33@gmail.com",
+    "password": "$2a$10$SLIcpAMez9xT59ETyY72yO/NtK52/3/hZW4qRvy/2qeqzQIF/HAUa",
+    "role": "EMPLOYEE",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=sunand-user"
+  },
+  {
+    "userId": "user_4gokkcoso",
+    "name": "dhanush-admin",
+    "email": "dhanush1@gmail.com",
+    "password": "$2a$10$jonI44hDma8/4c8wkr4Vtuu4LRPCkrFR0lJ1Qf6iZcmJFoaksFtjC",
+    "role": "ADMIN",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=dhanush-admin"
+  }
+]

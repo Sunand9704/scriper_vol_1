@@ -1,0 +1,146 @@
+[
+  {
+    "_id": "66b1a1a1a1a1a1a1a1a1a001",
+    "name": "Starlight Premium PG for Men",
+    "place": "Koramangala 5th Block, Bangalore",
+    "ownerName": "Rajesh Kumar",
+    "ownerMobile": "+91 98765 43210",
+    "category": "PG",
+    "stayType": "Both Short & Long Stay",
+    "shortStayDuration": "1-7 Days",
+    "dailyPrice": 450,
+    "longStayDuration": "1 Month+",
+    "monthlyPrice": 9500,
+    "rent": 9500,
+    "deposit": 15000,
+    "address": "No. 42, 1st Cross, Near Jyoti Nivas College Road, Koramangala",
+    "imageUrl": "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "WiFi",
+      "AC",
+      "Food",
+      "TV",
+      "Housekeeping",
+      "Power Backup",
+      "RO Water",
+      "Washing Machine"
+    ],
+    "categoryDetails": {
+      "foodIncluded": true,
+      "foodType": "Both (Veg & Non-Veg)",
+      "sharingTypes": [
+        "Single",
+        "2 Sharing",
+        "3 Sharing"
+      ],
+      "acAvailable": true,
+      "curfewTime": "10:30 PM",
+      "housekeeping": true
+    },
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "_id": "66b1a1a1a1a1a1a1a1a1a002",
+    "name": "Apex Luxury Girls Hostel & Residency",
+    "place": "HSR Layout Sector 2, Bangalore",
+    "ownerName": "Anita Sharma",
+    "ownerMobile": "+91 91234 56789",
+    "category": "Hostel",
+    "stayType": "Long Stay",
+    "shortStayDuration": "1-7 Days",
+    "dailyPrice": 600,
+    "longStayDuration": "1 Month+",
+    "monthlyPrice": 11000,
+    "rent": 11000,
+    "deposit": 20000,
+    "address": "Plot 88, 27th Main Rd, Sector 2, HSR Layout",
+    "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "WiFi",
+      "CCTV Security",
+      "Warden On-site",
+      "Mess Canteen",
+      "Study Room",
+      "Biometric Lock",
+      "RO Water"
+    ],
+    "categoryDetails": {
+      "hostelType": "Girls Hostel",
+      "roomTypes": [
+        "Double Sharing",
+        "Triple Sharing"
+      ],
+      "canteenFacility": true,
+      "wardenContact": "+91 91234 56799",
+      "securityCCTV": true,
+      "studyRoom": true
+    },
+    "createdAt": "2026-08-03T00:00:00.000Z"
+  },
+  {
+    "_id": "66b1a1a1a1a1a1a1a1a1a003",
+    "name": "Backpackers Pod & Dormitory",
+    "place": "Indiranagar 100ft Road, Bangalore",
+    "ownerName": "Vikram Malhotra",
+    "ownerMobile": "+91 99887 76655",
+    "category": "Dormitory",
+    "stayType": "Short Stay",
+    "shortStayDuration": "1 Day",
+    "dailyPrice": 450,
+    "longStayDuration": "1 Month+",
+    "monthlyPrice": 9000,
+    "rent": 450,
+    "deposit": 500,
+    "address": "12A, 100 Feet Rd, Opposite Metro Station, Indiranagar",
+    "imageUrl": "https://images.unsplash.com/photo-1520277739336-7bf67edfa768?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "WiFi",
+      "Personal Lockers",
+      "AC",
+      "24/7 Washroom",
+      "Keycard Access",
+      "Lounge"
+    ],
+    "categoryDetails": {
+      "totalBeds": 24,
+      "rateType": "Daily Rate",
+      "bedType": "Bunk Bed Pod",
+      "lockersAvailable": true,
+      "washroomsCount": 6,
+      "checkInTime": "12:00 PM (24/7 Access)"
+    },
+    "createdAt": "2026-08-05T00:00:00.000Z"
+  },
+  {
+    "_id": "66b1a1a1a1a1a1a1a1a1a004",
+    "name": "Urban Nest 1BHK Bachelor Studio",
+    "place": "BTM Layout 2nd Stage, Bangalore",
+    "ownerName": "Suresh Reddy",
+    "ownerMobile": "+91 97654 32109",
+    "category": "Bachelor Room",
+    "stayType": "Long Stay",
+    "shortStayDuration": "1-7 Days",
+    "dailyPrice": 800,
+    "longStayDuration": "1 Month+",
+    "monthlyPrice": 14000,
+    "rent": 14000,
+    "deposit": 30000,
+    "address": "House 304, 7th Main, BTM 2nd Stage",
+    "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Kitchen Setup",
+      "Balcony",
+      "24/7 Water",
+      "Covered Parking",
+      "Power Backup"
+    ],
+    "categoryDetails": {
+      "roomType": "1 BHK Independent",
+      "furnishing": "Semi-Furnished",
+      "allowedTenants": "Bachelors Male / Female",
+      "kitchenAvailable": true,
+      "waterSupply": "24 Hours Borewell & Kaveri"
+    },
+    "createdAt": "2026-08-08T00:00:00.000Z"
+  }
+]
